@@ -1,0 +1,18 @@
+:root { --fg:#222; --muted:#666; --bg:#fff; }
+*{ box-sizing:border-box; }
+body{ margin:0; color:var(--fg); background:var(--bg); font:16px/1.6 system-ui, sans-serif; }
+.wrap{ max-width:900px; margin:auto; padding:16px; }
+h1{ font-size:1.6rem; margin:0 0 12px; }
+.errors{ background:#ffe4e4; border:1px solid #f7bcbc; padding:8px 12px; border-radius:8px; }
+form textarea{ width:100%; }
+.row{ display:flex; gap:8px; align-items:center; margin-top:8px; }
+.hint{ color:var(--muted); font-size:.9rem; }
+.list{ list-style:none; padding:0; margin:0; display:grid; gap:12px; }
+.list li{ border:1px solid #eee; border-radius:12px; padding:12px; }
+.list header{ display:flex; gap:12px; align-items:center; color:var(--muted); font-size:.9rem; }
+.list .id{ font-weight:600; color:#333; }
+.thumb img{ max-width:100%; height:auto; border-radius:8px; border:1px solid #eee; }
+.pager{ display:flex; gap:8px; margin-top:16px; flex-wrap:wrap; }
+.pager a{ padding:6px 10px; border:1px solid #ddd; border-radius:8px; text-decoration:none; color:#333; }
+.pager a.current{ background:#333; color:#fff; }
+@media (max-width:600px){ body{ font-size:15px; } .wrap{ padding:12px; } }

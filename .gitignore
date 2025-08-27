@@ -1,0 +1,20 @@
+# OS / editor
+.DS_Store
+Thumbs.db
+*.swp
+
+# Node/Composer(未使用でも保険)
+node_modules/
+vendor/
+
+# Docker / logs
+*.log
+
+# Secrets / SSH keys
+*.pem
+*.key
+.ssh/
+
+# Uploads (中身は追わず、.gitkeepだけ残す)
+upload/image/*
+!upload/image/.gitkeep

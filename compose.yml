@@ -1,0 +1,29 @@
+services:
+  web:
+    image: nginx:latest
+    ports:
+      - "80:80"   # 開発中は8080で同居。提出直前に80:80へ戻す
+    volumes:
+      - ./nginx/conf.d/:/etc/nginx/conf.d/
+      - ./public/:/var/www/public/
+      - ./upload/image/:/var/www/upload/image/
+    depends_on:
+      - php
+  php:
+    build: .
+    volumes:
+      - ./public/:/var/www/public/
+      - ./upload/image/:/var/www/upload/image/
+    depends_on:
+      - mysql
+  mysql:
+    image: mysql:8.4
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpass
+      MYSQL_DATABASE: appdb
+      MYSQL_USER: appuser
+      MYSQL_PASSWORD: apppass
+    volumes:
+      - web-mysql-data:/var/lib/mysql
+volumes:
+  web-mysql-data:
