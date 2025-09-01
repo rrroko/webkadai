@@ -46,10 +46,8 @@ git --version
 
 
 cd ~ && rm -rf web
-# SSH 方式
-git clone git@github.com:YOUR_GITHUB_USERNAME/webkadai.git web
-# HTTPS 方式（代替）
-# git clone https://github.com/YOUR_GITHUB_USERNAME/webkadai.git web
+# HTTPS 方式
+# git clone https://github.com/rrroko/webkadai.git
 cd ~/web
 ```
 
