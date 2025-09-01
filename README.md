@@ -5,12 +5,12 @@
 
   * **AMI**: Amazon Linux 2023
   * **Instance type**: t3.micro（相当で可）
-  * **Key pair**: 既存の .pem を選択（無ければ *Create key pair* → `ed25519` / `.pem` を作成して保存）
+  * **Key pair**: .pemを作成
   * **Network settings**:
 
     * **Auto-assign public IP**: 有効（Enable）
     * **Security group（Inbound）** 追加: ① SSH/TCP 22 → *My IP*、② HTTP/TCP 80 → *0.0.0.0/0*
-* **Launch** で起動し、**Public IPv4 address** を控えます（例: 54.x.x.x）。
+* **Launch** で起動し、**Public IPv4 address** を控える
 
   * 任意: IPを固定したい場合は **Elastic IP** を割り当てます。
 
@@ -20,12 +20,6 @@
 
 * **Windows / CMD**: `ssh -i C:\Users\Desktop\既存.pem ec2-user@<PublicIP>`
 
-**SCP（ファイル転送）例**
-
-* PowerShell: `scp -i "C:\Users\<あなた>\Desktop\test.pem" .\web.zip ec2-user@<PublicIP>:~`
-
----
-
 ## 3) Docker / Docker Compose のインストール（Amazon Linux 2023）
 
 ```bash
@@ -33,6 +27,7 @@ sudo dnf -y update || sudo yum -y update
 sudo dnf -y install docker docker-compose-plugin || sudo yum -y install docker
 sudo systemctl enable --now docker
 sudo usermod -aG docker ec2-user
+
 # 反映: 一度 exit → 再SSH もしくは newgrp docker
 
 # 動作確認
@@ -44,9 +39,12 @@ docker compose version
 
 ## 4) ソースコードの取得（Git から持ってくる）
 
-> 自分の GitHub ユーザー名に置き換え。SSH 方式推奨（公開鍵を GitHub に登録）。
-
 ```bash
+1) Git を入れる（Amazon Linux 2023）
+sudo dnf -y install git || sudo yum -y install git
+git --version
+
+
 cd ~ && rm -rf web
 # SSH 方式
 git clone git@github.com:YOUR_GITHUB_USERNAME/webkadai.git web
