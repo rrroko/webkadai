@@ -29,6 +29,10 @@ sudo systemctl enable --now docker
 sudo usermod -aG docker ec2-user
 
 # 反映: 一度 exit → 再SSH もしくは newgrp docker
+exit
+# ローカルPCから再接続
+ssh -i <鍵.pem> ec2-user@<PublicIP>
+cd ~/web
 
 # 動作確認
 docker --version
