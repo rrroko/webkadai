@@ -9,7 +9,6 @@
   * **Network settings**:
 
     * **Auto-assign public IP**: 有効（Enable）
-    * **Security group（Inbound）** 追加: ① SSH/TCP 22 → *My IP*、② HTTP/TCP 80 → *0.0.0.0/0*
 * **Launch** で起動し、**Public IPv4 address** を控える
 
   * 任意: IPを固定したい場合は **Elastic IP** を割り当てます。
@@ -28,11 +27,27 @@ sudo dnf -y install docker docker-compose-plugin || sudo yum -y install docker
 sudo systemctl enable --now docker
 sudo usermod -aG docker ec2-user
 
+# 必要ツール
+sudo dnf -y install curl
+
+# アーキ判定（x86_64 / aarch64）
+ARCH=$(uname -m)
+case "$ARCH" in
+  x86_64)   BIN=docker-compose-linux-x86_64 ;;
+  aarch64)  BIN=docker-compose-linux-aarch64 ;;
+  *) echo "Unsupported arch: $ARCH"; exit 1 ;;
+esac
+
+# プラグイン配置（システム全体）
+sudo mkdir -p /usr/libexec/docker/cli-plugins
+sudo curl -L "https://github.com/docker/compose/releases/download/v2.27.0/$BIN" \
+  -o /usr/libexec/docker/cli-plugins/docker-compose
+sudo chmod +x /usr/libexec/docker/cli-plugins/docker-compose
+
 # 反映: 一度 exit → 再SSH もしくは newgrp docker
 exit
 # ローカルPCから再接続
 ssh -i <鍵.pem> ec2-user@<PublicIP>
-cd ~/web
 
 # 動作確認
 docker --version
@@ -76,7 +91,6 @@ docker compose up -d
 docker compose ps
 ```
 
----
 
 ## 7) テーブル作成（init.sql を適用）
 
@@ -84,19 +98,6 @@ docker compose ps
 docker compose exec -T mysql \
   mysql -uappuser -papppass appdb < init.sql
 ```
-
-> 参考SQL（init.sql と同一）：
-
-```sql
-CREATE TABLE IF NOT EXISTS bbs_entries (
-  id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-  body TEXT NOT NULL,
-  image_filename TEXT DEFAULT NULL,
-  created_at DATETIME DEFAULT CURRENT_TIMESTAMP
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-```
-
----
 
 ## 8) 動作確認
 
