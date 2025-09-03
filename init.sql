@@ -4,3 +4,11 @@ CREATE TABLE IF NOT EXISTS bbs_entries (
   image_filename TEXT DEFAULT NULL,
   created_at DATETIME DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE IF NOT EXISTS bbs_reactions (
+  entry_id BIGINT UNSIGNED NOT NULL,
+  kind VARCHAR(16) NOT NULL,
+  count INT UNSIGNED NOT NULL DEFAULT 0,
+  PRIMARY KEY(entry_id, kind),
+  INDEX idx_entry_id (entry_id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
