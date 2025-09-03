@@ -16,7 +16,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $mime = $finfo->file($_FILES['image']['tmp_name']);
         $allowed = ['image/jpeg' => 'jpg', 'image/png' => 'png', 'image/gif' => 'gif', 'image/webp' => 'webp'];
         if (!isset($allowed[$mime])) {
-          $errors[] = '画像ファイル（jpg/png/gif/webp）のみアップロードできます';
+          $errors[] = '画像ファイルのみアップロードできます';
         } else {
           $ext = $allowed[$mime];
           $filename = bin2hex(random_bytes(8)).".$ext";
@@ -46,6 +46,23 @@ $total = (int)$pdo->query('SELECT COUNT(*) FROM bbs_entries')->fetchColumn();
 $pages = max(1, (int)ceil($total / $per));
 
 $rows = $pdo->query("SELECT * FROM bbs_entries ORDER BY id DESC LIMIT $per OFFSET $offset")->fetchAll();
+$ids = array_column($rows, 'id');
+$reactions = [];
+if ($ids) {
+  $in = implode(',', array_fill(0, count($ids), '?'));
+  $stmt = $pdo->prepare("SELECT entry_id, kind, count FROM bbs_reactions WHERE entry_id IN ($in)");
+  $stmt->execute($ids);
+  foreach ($stmt as $row) {
+    $entryId = (int)$row['entry_id'];
+    $kind = (string)$row['kind'];
+    $cnt = (int)$row['count'];
+    if (!isset($reactions[$entryId])) $reactions[$entryId] = [];
+    $reactions[$entryId][$kind] = $cnt;
+  }
+}
+function react_count($reactions, $id, $kind){
+  return isset($reactions[$id][$kind]) ? (int)$reactions[$id][$kind] : 0;
+}
 ?>
 <!doctype html>
 <html lang="ja">
@@ -62,7 +79,13 @@ $rows = $pdo->query("SELECT * FROM bbs_entries ORDER BY id DESC LIMIT $per OFFSE
 
   <?php if ($errors): ?>
   <div class="errors">
-    <ul><?php foreach ($errors as $e) echo '<li>'.h($e).'</li>'; ?></ul>
+    <ul><?php foreach ($errors as $e) echo '<li>'.h($e).'<div class="reactions" data-id="<?php echo (int)$r['id']; ?>">
+  <button class="react" data-kind="heart" type="button">♥ <span class="cnt"><?php echo react_count($reactions, (int)$r['id'], 'heart'); ?></span></button>
+  <button class="react" data-kind="plusone" type="button">👍 <span class="cnt"><?php echo react_count($reactions, (int)$r['id'], 'plusone'); ?></span></button>
+  <button class="react" data-kind="joy" type="button">😂 <span class="cnt"><?php echo react_count($reactions, (int)$r['id'], 'joy'); ?></span></button>
+  <button class="react" data-kind="tada" type="button">🎉 <span class="cnt"><?php echo react_count($reactions, (int)$r['id'], 'tada'); ?></span></button>
+</div>
+</li>'; ?></ul>
   </div>
   <?php endif; ?>
 
@@ -72,7 +95,7 @@ $rows = $pdo->query("SELECT * FROM bbs_entries ORDER BY id DESC LIMIT $per OFFSE
       <input type="file" name="image" id="image" accept="image/*">
       <button type="submit">投稿</button>
     </div>
-    <p class="hint">※ 画像は自動的に 5MB 以下に縮小されます。</p>
+    <p class="hint">※ 画像は自動的に 5MB 以下に縮小されます</p>
   </form>
 
   <hr>
