@@ -67,12 +67,12 @@ $rows = $pdo->query("SELECT * FROM bbs_entries ORDER BY id DESC LIMIT $per OFFSE
   <?php endif; ?>
 
   <form method="post" enctype="multipart/form-data" id="post-form">
-    <textarea name="body" rows="4" placeholder="本文（>>123 でレスアンカー）" required></textarea>
+    <textarea name="body" rows="4" placeholder="本文" required></textarea>
     <div class="row">
       <input type="file" name="image" id="image" accept="image/*">
       <button type="submit">投稿</button>
     </div>
-    <p class="hint">※ 画像は自動的に 5MB 以下に縮小されます（ブラウザ側）。</p>
+    <p class="hint">※ 画像は自動的に 5MB 以下に縮小されます。</p>
   </form>
 
   <hr>
