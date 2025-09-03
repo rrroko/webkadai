@@ -1,4 +1,4 @@
-/* --- Modern BBS theme (light/dark) --- */
+/* --- Modern BBS theme (light/dark) + reactions + dnd + lightbox --- */
 :root {
   --bg: #0b1020;
   --surface: #0f1629;
@@ -8,6 +8,7 @@
   --border: #223054;
   --accent: #7c9bff;
   --accent-2: #22c55e;
+  --danger: #ef4444;
   --shadow: 0 8px 24px rgba(0,0,0,.35);
 }
 
@@ -19,8 +20,9 @@
     --fg: #1c2434;
     --muted: #5c6b88;
     --border: #e6eaf2;
-    --accent: #4f46e5; /* indigo-600 */
-    --accent-2: #16a34a; /* green-600 */
+    --accent: #4f46e5;
+    --accent-2: #16a34a;
+    --danger: #dc2626;
     --shadow: 0 6px 20px rgba(16,24,40,.08);
   }
 }
@@ -79,6 +81,12 @@ h1 {
 }
 #post-form .row { display: flex; gap: 10px; align-items: center; margin-top: 10px; flex-wrap: wrap; }
 
+/* Drag & drop highlight */
+#post-form.drop {
+  outline: 2px dashed color-mix(in oklab, var(--accent) 60%, transparent);
+  outline-offset: 4px;
+}
+
 /* File input (modern browsers) */
 #post-form input[type="file"] {
   color: var(--muted);
@@ -118,8 +126,8 @@ button:active, .btn:active { transform: translateY(1px); }
 /* Hints & errors */
 .hint { color: var(--muted); font-size: .92rem; margin-top: 6px; }
 .errors {
-  background: color-mix(in oklab, #ff4d4f 15%, transparent);
-  border: 1px solid color-mix(in oklab, #ff4d4f 35%, var(--border));
+  background: color-mix(in oklab, var(--danger) 15%, transparent);
+  border: 1px solid color-mix(in oklab, var(--danger) 35%, var(--border));
   padding: 10px 12px; border-radius: 12px;
 }
 
@@ -167,6 +175,31 @@ button:active, .btn:active { transform: translateY(1px); }
 }
 .thumb img:hover { box-shadow: 0 10px 30px rgba(0,0,0,.25); transform: translateY(-1px); }
 
+/* Reactions bar */
+.reactions {
+  display: flex; gap: 8px; margin-top: 8px; flex-wrap: wrap;
+}
+.reactions .react {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 6px 10px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  border-radius: 999px;
+  font-weight: 600;
+  text-decoration: none;
+  color: var(--fg);
+  transition: transform .06s ease, border-color .2s, background .2s, box-shadow .2s;
+}
+.reactions .react:hover {
+  border-color: color-mix(in oklab, var(--accent) 60%, var(--border));
+  box-shadow: 0 4px 16px rgba(0,0,0,.15);
+}
+.reactions .react .cnt { margin-left: 2px; font-weight: 700; }
+.reactions .react.reacted {
+  border-color: color-mix(in oklab, var(--accent-2) 60%, var(--border));
+  background: color-mix(in oklab, var(--accent-2) 18%, var(--surface));
+}
+
 /* Pager */
 .pager { display: flex; gap: 8px; margin: 18px 0 0; flex-wrap: wrap; }
 .pager a {
@@ -196,12 +229,24 @@ hr {
 a { color: var(--accent); }
 a:hover { text-decoration: none; }
 
+/* Lightbox (class-based, if JS uses classes instead of inline styles) */
+.lightbox-overlay {
+  position: fixed; inset: 0; background: rgba(0,0,0,.75);
+  display: flex; align-items: center; justify-content: center;
+  z-index: 9999; padding: 24px; cursor: zoom-out;
+}
+.lightbox-image {
+  max-width: min(1200px, 95vw); max-height: 90vh;
+  border-radius: 12px; box-shadow: 0 12px 40px rgba(0,0,0,.5);
+}
+
 /* Mobile */
 @media (max-width: 600px) {
   body { font-size: 15px; }
   .wrap { padding: 14px; }
   #post-form { padding: 12px; border-radius: 14px; }
   .list li { padding: 12px; border-radius: 14px; }
+  .reactions .react { padding: 6px 10px; }
 }
 
 /* Reduced motion */
