@@ -79,15 +79,14 @@ function react_count($reactions, $id, $kind){
 
   <?php if ($errors): ?>
   <div class="errors">
-    <ul><?php foreach ($errors as $e) echo '<li>'.h($e).'<div class="reactions" data-id="<?php echo (int)$r['id']; ?>">
-  <button class="react" data-kind="heart" type="button">♥ <span class="cnt"><?php echo react_count($reactions, (int)$r['id'], 'heart'); ?></span></button>
-  <button class="react" data-kind="plusone" type="button">👍 <span class="cnt"><?php echo react_count($reactions, (int)$r['id'], 'plusone'); ?></span></button>
-  <button class="react" data-kind="joy" type="button">😂 <span class="cnt"><?php echo react_count($reactions, (int)$r['id'], 'joy'); ?></span></button>
-  <button class="react" data-kind="tada" type="button">🎉 <span class="cnt"><?php echo react_count($reactions, (int)$r['id'], 'tada'); ?></span></button>
-</div>
-</li>'; ?></ul>
+    <ul>
+      <?php foreach ($errors as $e): ?>
+        <li><?php echo h($e); ?></li>
+      <?php endforeach; ?>
+    </ul>
   </div>
   <?php endif; ?>
+
 
   <form method="post" enctype="multipart/form-data" id="post-form">
     <textarea name="body" rows="4" placeholder="本文" required></textarea>
@@ -111,6 +110,12 @@ function react_count($reactions, $id, $kind){
         <?php if ($r['image_filename']): ?>
           <figure class="thumb"><img src="/image/<?php echo h($r['image_filename']); ?>" alt=""></figure>
         <?php endif; ?>
+        <div class="reactions" data-id="<?php echo (int)$r['id']; ?>">
+          <button class="react" data-kind="heart" type="button">♥ <span class="cnt"><?php echo react_count($reactions, (int)$r['id'], 'heart'); ?></span></button>
+          <button class="react" data-kind="plusone" type="button">👍 <span class="cnt"><?php echo react_count($reactions, (int)$r['id'], 'plusone'); ?></span></button>
+          <button class="react" data-kind="joy" type="button">😂 <span class="cnt"><?php echo react_count($reactions, (int)$r['id'], 'joy'); ?></span></button>
+          <button class="react" data-kind="tada" type="button">🎉 <span class="cnt"><?php echo react_count($reactions, (int)$r['id'], 'tada'); ?></span></button>
+        </div>
       </li>
     <?php endforeach; ?>
   </ol>
