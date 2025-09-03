@@ -66,8 +66,8 @@ git --version
 
 cd ~ && rm -rf web
 # HTTPS 方式
-# git clone https://github.com/rrroko/webkadai.git
-cd ~/web
+git clone https://github.com/rrroko/webkadai.git
+cd ~/webkadai
 ```
 
 ---
