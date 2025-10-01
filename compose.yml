@@ -25,5 +25,12 @@ services:
       MYSQL_PASSWORD: apppass
     volumes:
       - web-mysql-data:/var/lib/mysql
+
+  redis:
+    container_name: redis
+    image: redis:latest
+    ports:
+      - 6379:6379
+  
 volumes:
   web-mysql-data:
