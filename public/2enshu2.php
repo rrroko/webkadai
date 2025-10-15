@@ -1,4 +1,5 @@
 <?php
+date_default_timezone_set('Asia/Tokyo');
 function h($s){ return htmlspecialchars((string)$s, ENT_QUOTES|ENT_SUBSTITUTE, 'UTF-8'); }
 
 $cookie = 'session_id';
@@ -22,4 +23,5 @@ $r->set($key, json_encode($data, JSON_UNESCAPED_UNICODE));
 
 echo "このセッションでの ".h($data['count'])." 回目のアクセスです。<br>";
 echo "前回のアクセス日時: ".h($prevAt ?? '（初回）');
+
 
